@@ -19,14 +19,6 @@ app.ws('/', function(ws, req){
     wsHandle.handle(ws, req)
 })
 
-class Error{
-    constructor(type, code){
-      	this.method = "error"
-        this.type = type
-        this.code = code
-    }
-}
-
 app.listen(port, function(error) {
   if (error) {
     console.error(error)
