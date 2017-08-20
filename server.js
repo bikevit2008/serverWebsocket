@@ -1,8 +1,13 @@
 const app = new (require('express'))()
 const expressWs = require('express-ws')(app)
+const helmet = require('helmet')
+const expressLogging = require('express-logging')
+const logger = require('logops')
 
-const port = 3000
+const port = 80
 
+app.use(helmet())
+app.use(expressLogging(logger))
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + '/index.html')
@@ -14,7 +19,7 @@ app.ws('/', (ws, req) => {
       ws.on('message', msg => {
         console.log('Meassage got: ' + msg)
         try{
-            var jsonMsg = JSON.parse(msg)
+            let jsonMsg = JSON.parse(msg)
             let method = jsonMsg.method
             if(method){
                 switch(method){
@@ -43,6 +48,7 @@ app.ws('/', (ws, req) => {
             let jsonError = JSON.stringify(error)
             ws.send(jsonError)
             console.log('Unknow user testing our service. Thats bad.')
+            console.log(msg)
             console.log(errorParse.name)
             console.log(errorParse.message)
         }
