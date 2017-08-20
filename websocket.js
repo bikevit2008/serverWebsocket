@@ -39,5 +39,12 @@ var handle = function(ws, req){
         }
       })
 }
+class Error{
+    constructor(type, code){
+      	this.method = "error"
+        this.type = type
+        this.code = code
+    }
+}
 
 module.exports.handle = handle
