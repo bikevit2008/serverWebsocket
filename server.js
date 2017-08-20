@@ -1,11 +1,11 @@
-const express = require('express')
-const app = express()
-const options = {wsOptions: {clientTracking: true}}
-var expressWs = require('express-ws')(app, null, options)
-//var wss = expressWs.getWss()
+const app = new (require('express'))()
+const expressWs = require('express-ws')(app)
 
-app.get('/', function (req, res) {
-  res.send('Hello World!')
+const port = 3000
+
+
+app.get("/", function(req, res) {
+  res.sendFile(__dirname + '/index.html')
 })
 
 app.ws('/', (ws, req) => {
@@ -43,14 +43,11 @@ app.ws('/', (ws, req) => {
             let jsonError = JSON.stringify(error)
             ws.send(jsonError)
             console.log('Unknow user testing our service. Thats bad.')
+            console.log(errorParse.name)
+            console.log(errorParse.message)
         }
-        //expressWs.getWss().clients.forEach(client => {client.send(msg)})
       })
       
-})
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
 })
 
 class Error{
@@ -60,3 +57,11 @@ class Error{
         this.code = code
     }
 }
+
+app.listen(port, function(error) {
+  if (error) {
+    console.error(error)
+  } else {
+    console.info("==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
+  }
+})
